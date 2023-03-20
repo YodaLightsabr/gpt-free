@@ -1,6 +1,18 @@
 import fetch from 'node-fetch';
 import { EventEmitter } from 'events';
 
+function handleChunks (chunks) {
+    let error = false;
+    let message = '';
+
+    for (const chunk of chunks) {
+        if (chunk.error) error = true;
+        message += chunk.text;
+    }
+
+    return [error, message];
+}
+
 export class Response extends EventEmitter {
     constructor (fetchResponse) {
         super();
@@ -10,7 +22,9 @@ export class Response extends EventEmitter {
         this.data = '';
 
         this.fetchBody.on('data', (chunk) => {
-            const text = chunk.toString().trim().split('\n\n').map(a => JSON.parse(a.trim().substring(6)).text).join('');
+            const chunks = chunk.toString().trim().split('\n\n').map(a => JSON.parse(a.trim().substring(6)));
+            const [error, text] = handleChunks(chunks);
+            if (error) return this.emit('error');
             this.data += text;
             this.emit('text', text);
         });
@@ -27,6 +41,11 @@ export class Response extends EventEmitter {
 
     onEnd (callback) {
         this.once('end', () => callback(this.data));
+        return this;
+    }
+
+    onError (callback) {
+        this.once('error', () => callback(this.data));
         return this;
     }
 }
@@ -95,6 +114,14 @@ export class Conversation {
         promise.onEnd = callback => {
             responsePromise.then(response => {
                 response.onEnd(callback);
+            });
+            return promise;
+        };
+        
+
+        promise.onError = callback => {
+            responsePromise.then(response => {
+                response.onError(callback);
             });
             return promise;
         };
