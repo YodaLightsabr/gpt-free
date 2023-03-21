@@ -158,7 +158,7 @@ export class Client {
     }
 
     customModel (model) {
-        return new Conversation(new Model(model), this);
+        return new Conversation(model, this);
     }
 }
 
