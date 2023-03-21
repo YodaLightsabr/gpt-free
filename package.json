@@ -21,7 +21,7 @@
     "./web": {
       "import": "./web.js"
     },
-    "./node": {
+    ".": {
       "import": "./index.js"
     }
   }
