@@ -2,10 +2,11 @@
   "type": "module",
   "dependencies": {
     "chalk": "^5.2.0",
+    "events": "^3.3.0",
     "node-fetch": "^3.3.1"
   },
   "name": "gpt-free",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "GPT-3 but free",
   "main": "index.js",
   "scripts": {
@@ -17,10 +18,10 @@
     "ai": "./ai.js"
   },
   "exports": {
-    "web": {
+    "./web": {
       "import": "./web.js"
     },
-    "node": {
+    "./node": {
       "import": "./index.js"
     }
   }
