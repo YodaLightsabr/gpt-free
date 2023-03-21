@@ -122,13 +122,13 @@ export class Conversation {
         }).then(res => res.text());
 
         const response = res.trim().split('\n\n').map(line => JSON.parse(line.trim().substring(6)).text).join('');
-        
+
         this.messages.push({
             author: 'assistant',
             data: response
         });
 
-        return res;
+        return response;
     }
 
     ask (message) {

@@ -6,7 +6,7 @@
     "node-fetch": "^3.3.1"
   },
   "name": "gpt-free",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "GPT-3 but free",
   "main": "index.js",
   "scripts": {
