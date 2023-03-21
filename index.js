@@ -136,9 +136,17 @@ export class Conversation {
 
 const models = {
     chat: {
+        name: 'chat',
         endpoint: 'https://chat.gptfree.top/ai'
     }
 };
+
+export class Model {
+    constructor (name, endpoint) {
+        this.name = name;
+        this.endpoint = endpoint;
+    }
+}
 
 export class Client {
     constructor (token = "demo-v1") {
@@ -147,6 +155,10 @@ export class Client {
 
     model (model) {
         return new Conversation(models[model], this);
+    }
+
+    customModel (model) {
+        return new Conversation(new Model(model), this);
     }
 }
 
