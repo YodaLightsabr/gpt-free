@@ -1,8 +1,6 @@
 import { Conversation, models } from "./engine.js";
 export * from "./engine.js";
 
-import fetch from 'node-fetch';
-
 export class Client {
     constructor (token = "demo-v1") {
         this.token = token;
