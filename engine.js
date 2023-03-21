@@ -95,6 +95,42 @@ export class Conversation {
         return response;
     }
 
+    async getCompleteResponse (message) {
+        this.messages.push({
+            author: 'user',
+            data: message
+        });
+
+        const body = {
+            debug: false,
+            locale: this.locale,
+            messages: this.messages.map(message => ({
+                author: message.author,
+                content: {
+                    text: message.data
+                }
+            }))
+        };
+
+        const res = await this.client.fetch(this.model.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'GPT-Free-Auth': this.client.token
+            },
+            body: JSON.stringify(body)        
+        }).then(res => res.text());
+
+        const response = res.trim().split('\n\n').map(line => JSON.parse(line.trim().substring(6)).text).join('');
+        
+        this.messages.push({
+            author: 'assistant',
+            data: response
+        });
+
+        return res;
+    }
+
     ask (message) {
         const responsePromise = this.#ask(message);
         const promise = new Promise((resolve, reject) => {
